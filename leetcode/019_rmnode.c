@@ -32,10 +32,7 @@ struct ListNode* removeNthFromEnd(struct ListNode* head, int n) {
     
 	q->next =  q->next->next;
 	
-	if (q == &f) 
-		return q->next;
-	else
-		return head; 
+	return f.next; 
 }
 
 int main(int argc, char *argv[])
