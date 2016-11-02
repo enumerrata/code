@@ -11,25 +11,18 @@ bool isValid(char* s) {
 
 	st = malloc(strlen(s));
 	while (*p) {
-		if (*p == '(' || *p == '[' || *p == '{')
+		if (*p == '(' || *p == '[' || *p == '{') {
 			st[len++] = *p;
-		else if (*p == ')') {
-			if (--len < 0)
-				return false;
-			if ( st[len] != '(')
+		} else if (*p == ')') {
+			if (--len < 0 || st[len] != '(')
 				return false;
 		} else if (*p == ']') {
-			if (--len < 0)
-				return false;
-			if ( st[len] != '[')
+			if (--len < 0 || st[len] != '[')
 				return false;
 		} else if (*p == '}') {
-			if (--len < 0)
-				return false;
-			if ( st[len] != '{')
+			if (--len < 0 || st[len] != '{')
 				return false;
 		}
-
 		p++;
 	}
 	if (len)
