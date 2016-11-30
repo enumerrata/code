@@ -4,38 +4,61 @@
 #include <stdbool.h>
 #include <ctype.h>
 
+
+struct discnt {
+	int dist;
+	int cnt;
+};
+
+int count(struct discnt *d, int *len)
+{
+	int sum = 0;
+	int i;
+
+	for (i=0; i<*len; i++) {
+		sum += d[i].cnt * (d[i].cnt - 1);
+	}
+	return sum;
+}
+
+
+int add(struct discnt *d, int *len, int d1)
+{
+	int i;
+	for (i=0; i<*len; i++) {
+		if (d[i].dist == d1) {
+			d[i].cnt++;
+			return;
+		}
+	}
+
+	d[*len].dist = d1;
+	d[*len].cnt = 1;
+	*len += 1;
+
+}
+
 // should use map
 int numberOfBoomerangs(int** points, int pointsRowSize, int pointsColSize) {
-    int len = 0;
     int i,j,k;
     int *prow;
-    int d1,d2;
-    int cnt=0;
-    int cache[500][500];
+    int d1;
+	struct discnt disc[500];
+	int len = 0;
+	int sum = 0;
     
     for (i=0; i<pointsRowSize; i++) {
-        for (j=i+1; j<pointsRowSize; j++)  {
-            cache[i][j] =  (points[i][0] - points[j][0]) * (points[i][0] - points[j][0]);
-            cache[i][j] += (points[i][1] - points[j][1]) * (points[i][1] - points[j][1]);
+		len = 0;
+        for (j=0; j<pointsRowSize; j++)  {
+			if (j == i) continue; 
+            d1 =  (points[i][0] - points[j][0]) * (points[i][0] - points[j][0]);
+            d1 += (points[i][1] - points[j][1]) * (points[i][1] - points[j][1]);
+			add(disc, &len, d1);
         }
+		sum += count(disc, &len);
     }
         
-    for (i=0; i<pointsRowSize; i++) {
-
-        for (j=0; j<pointsRowSize; j++)  {
-            if (j == i) continue;
-            for (k=0; k<pointsRowSize; k++) {
-                if (k == i || k == j) continue;
-                d1 = i < j ? cache[i][j] : cache[j][i];
-                d2 = i < k ? cache[i][k] : cache[k][i];
-                
-                if (d1==d2)
-                    cnt++;
-				//printf("%d %d %d: %d %d \n", i,j ,k, d1, d2);
-            }
-        }
-	}
-    return cnt;
+    return sum;
 }
 
 int main(int argc, char *argv[])
