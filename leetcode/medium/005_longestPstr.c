@@ -15,7 +15,7 @@ bool ispal(char *s, int len)
     return true;
 }
 
-char* longestPalindrome(char* s) {
+char* longestPalindrome_1(char* s) {
     int len = strlen(s);
     int i,j;
     int max=1;
@@ -37,6 +37,37 @@ char* longestPalindrome(char* s) {
 	p[max] = '\0';
     
     return p;
+}
+
+char* longestPalindrome_g(char* s) {
+    int longest = 1, length = strlen(s);
+    char *start = s, *center = s;
+
+    while (center + longest / 2 < s + length) {
+        
+        char* b = center, *e = center + 1;
+        // count # of chars in the center
+        // eg. in ...abbbba..., there are 4 b's in the center
+        while(*b == *e) { 
+            e++;
+        } 
+        
+        center = e;
+        
+        // count # of steps we can take
+        while(b > s && *(b - 1) == *e) {
+            --b, e++;
+        }
+
+        // eg. in ...tcabbbbacp...
+        // and length of cabbbbac is 8, e - b
+        if(e - b > longest) { 
+            longest = e - b; 
+            start = b;
+        }
+    }
+    
+    return strndup(start, longest);
 }
 
 int main(int argc, char *argv[])
