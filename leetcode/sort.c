@@ -44,6 +44,19 @@ void swap(char *a, char *b)
 	*b = t;
 }
 
+void selectsort_reverse(int *a, int n)
+{
+	int i,j;
+
+	for (i=1; i<n; i++) {
+		int t = a[i];
+		for (j=i; j>=1 && a[j-1] < t; j--) {
+				a[j] = a[j-1];
+		}
+		a[j] = t;
+	}
+
+}
 void selectsort(int *a, int n)
 {
 	int i,j;
@@ -54,7 +67,6 @@ void selectsort(int *a, int n)
 				a[j] = a[j-1];
 		}
 		a[j] = t;
-		pr(a, 10);
 	}
 
 }
