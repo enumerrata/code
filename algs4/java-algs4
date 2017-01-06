@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This must match the install directory.
-INSTALL=/home/yajwu/github/code/alg4
+INSTALL=/home/yajwu/github/code/algs4
 
 # Sets the path to the textbook libraries.
 CLASSPATH=(.:${INSTALL}/algs4.jar)
