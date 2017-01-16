@@ -56,8 +56,6 @@ char*** groupAnagrams(char** strs, int strsSize, int** columnSizes, int* returnS
 			cnt++;
 		}
 	}
-	
-
 
 	return p;
 }
