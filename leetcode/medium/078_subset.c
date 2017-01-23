@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <math.h>
 
 /**
  * Return an array of arrays of size *returnSize.
