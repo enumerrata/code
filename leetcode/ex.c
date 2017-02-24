@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <ctype.h>
 
+#include "tree.h"
+
 
 
 int main(int argc, char *argv[])
