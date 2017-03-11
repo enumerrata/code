@@ -6,4 +6,9 @@ struct TreeLinkNode {
  struct TreeLinkNode *left, *right, *next;
 };
 
+int min(int a, int b)
+{
+	return a < b ? a : b;
+}
+
 #endif
