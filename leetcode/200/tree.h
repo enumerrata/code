@@ -6,4 +6,8 @@ struct TreeLinkNode {
  struct TreeLinkNode *left, *right, *next;
 };
 
+struct ListNode {
+    int val;
+    struct ListNode *next;
+};
 #endif
