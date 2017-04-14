@@ -34,11 +34,13 @@ bool canFinish(int numCourses, int** prerequisites, int prerequisitesRowSize, in
     memset(isfinding, false, sizeof(bool) * numCourses); // whether is finding
     memset(canfind, false, sizeof(bool) * numCourses);   // whether the sourse can be started
     int i;
+
     for (i = 0 ; i < numCourses ; i++) {
         if (!canFind(prerequisites, prerequisitesRowSize, i, isfinding, canfind)) {
             return false;
         }
     }
+
     return true;
 }
 
