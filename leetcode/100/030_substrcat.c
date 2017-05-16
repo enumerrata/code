@@ -43,7 +43,9 @@ int stringhash(char* s, int l) {
 
 struct HashNode* hashmap_get(struct HashTable* table, int key) {
     int hash = key % table->bucketSize;
+
     while (hash < 0) hash += table->bucketSize;
+
     struct HashNode* node = table->buckets[hash];
     while(node != NULL && node->key <= key) {
         if(node->key == key) {
@@ -57,6 +59,7 @@ void hashmap_set(struct HashTable* table, int key, int value) {
     int hash = key % table->bucketSize;
     while (hash < 0) hash += table->bucketSize;
     struct HashNode* node = table->buckets[hash];
+
     if (node == NULL || node->key > key) {
     	struct HashNode * tmp = malloc(sizeof(struct HashNode));
     	tmp->key = key;
@@ -88,6 +91,7 @@ void hashmap_set(struct HashTable* table, int key, int value) {
 int* findSubstring(char* s, char** words, int wordsSize, int* returnSize) {
     int* res = malloc(sizeof(int) * 10000);
     (*returnSize) = 0;
+
     if (wordsSize == 0) return res;
     
     struct HashTable * table = hashmap_create(wordsSize * 2);
