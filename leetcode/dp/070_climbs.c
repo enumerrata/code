@@ -16,22 +16,19 @@ int climbStairs(int n) {
 */
 
 int climbStairs(int n) {
-	int a=2;
-	int b=1;
-	int i;
-	int s=0;
-
-	if (n == 2)
-		return 2;
-	if (n == 1)
-		return 1;
-	
-	for (i=0; i<n-2; i++) {
-		s = a + b;	
-		b = a;
-		a = s;
-	}
-	return s;
+    int a=1,b=2;
+    int t,i;
+    
+    if (n < 3)
+        return n;
+    
+    for (i=2; i<n; i++) {
+        t=a+b;
+        a=b;
+        b=t;
+    }
+    
+    return b;
 }
 
 int main(int argc, char *argv[])
