@@ -28,7 +28,6 @@ int uniquePaths(int m, int n) {
 	} 
 	return sum;
 }
-#endif
 
 int uniquePaths(int m, int n) {
 	int *p = malloc(sizeof(int) * m * n);
@@ -43,16 +42,24 @@ int uniquePaths(int m, int n) {
 			}
 		}
 	}
-#if 0
-	for (i=0; i<n; i++) {
-		for (j=0; j<m; j++) {
-			printf("%d ", p[i*m + j]);
-		}
-		printf("\n");
-	}
-#endif
 
 	return p[n*m-1];
+}
+#endif
+
+int uniquePaths(int m, int n) {
+    int a[m][n];
+    int i,j;
+    
+    for (i=0; i<m; i++)
+        for (j=0; j<n; j++) {
+            if (!i || !j) {
+                a[i][j] = 1;
+            } else {
+                a[i][j] = a[i-1][j]+a[i][j-1];
+            }
+        }
+    return a[m-1][n-1];
 }
 
 int main(int argc, char *argv[])
