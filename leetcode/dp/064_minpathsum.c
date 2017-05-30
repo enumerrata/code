@@ -5,7 +5,6 @@
 #include <ctype.h>
 
 int minPathSum(int** grid, int gridRowSize, int gridColSize) {
-    int min;
     int i,j;
     
     for (i=0; i<gridRowSize; i++) {
