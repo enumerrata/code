@@ -7,6 +7,7 @@
 
 #include "../tree.h"
 
+#if 0
 int min(int a, int b)
 {
     return a<b?a:b;
@@ -44,6 +45,40 @@ int maximalSquare(char** matrix, int matrixRowSize, int matrixColSize) {
         }
     return max*max;
     
+}
+#endif
+
+int max(int a, int b)
+{
+    return a>b?a:b;
+}
+
+int min(int a, int b)
+{
+    return a>b?b:a;
+}
+
+int maximalSquare(char** matrix, int matrixRowSize, int matrixColSize) {
+    int i,j;
+    char **a = matrix;
+    int mx = 0;
+    int mm;
+    
+    for (i=0; i<matrixRowSize; i++)
+        for (j=0; j<matrixColSize; j++) {
+            if (i && j) {
+                mm = min(min(a[i-1][j-1], a[i-1][j]), a[i][j-1]);
+                if (a[i][j] == '1')
+                    a[i][j] = mm + 1;
+                else
+                    a[i][j] = 0;
+            } else {
+                if (a[i][j] >= '0')
+                    a[i][j] -= '0';
+            }
+            mx = max(mx, a[i][j]);
+        }
+    return mx*mx;
 }
 
 int main(int argc, char *argv[])
