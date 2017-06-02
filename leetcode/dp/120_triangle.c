@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <ctype.h>
 
+#if 0
 int minimumTotal(int** triangle, int triangleRowSize, int *triangleColSizes) {
     int *p = malloc(sizeof(int) * triangleRowSize);
     int min = triangle[0][0];
@@ -28,7 +29,22 @@ int minimumTotal(int** triangle, int triangleRowSize, int *triangleColSizes) {
     }
     return min;
 }
-
+#endif
+int min(int a, int b)
+{
+    return a>b?b:a;
+}
+int minimumTotal(int** triangle, int triangleRowSize, int *triangleColSizes) {
+    int i,j;
+    int **p = triangle;
+    
+    for (i=triangleRowSize-2; i>=0; i--) {
+        for (j=0; j<triangleColSizes[i]; j++) {
+            p[i][j] += min(p[i+1][j], p[i+1][j+1]);
+        }
+    }
+    return p[0][0];
+}
 int main(int argc, char *argv[])
 {
 	printf("> \n");
