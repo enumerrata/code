@@ -16,6 +16,8 @@ bool isSubsequence(char* s, char* t) {
     return !*s;
 }
 
+/* LCS */
+
 int main(int argc, char *argv[])
 {
 	printf("> \n");
