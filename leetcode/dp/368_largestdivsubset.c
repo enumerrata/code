@@ -7,10 +7,6 @@
 
 #include "../tree.h"
 
-/**
- * Return an array of size *returnSize.
- * Note: The returned array must be malloced, assume caller calls free().
- */
 int max(int a, int b)
 {
     return a>b?a:b;
@@ -37,6 +33,10 @@ int* largestDivisibleSubset(int* nums, int numsSize, int* returnSize) {
     int siz = 0;
 	int max=0, id=0;
     
+    if (!numsSize) {
+        *returnSize = 0;
+        return NULL;
+    }
     p = malloc(sizeof(int) * numsSize);
 	*returnSize = 0;
     
@@ -58,8 +58,8 @@ int* largestDivisibleSubset(int* nums, int numsSize, int* returnSize) {
 		}
     }
 
-	printf("%d %d %d \n", t[0], t[1], t[2]);
-	printf("%d %d %d %d\n", a[0], a[1], a[2], a[3]);
+	//printf("%d %d %d \n", t[0], t[1], t[2]);
+	//printf("%d %d %d %d\n", a[0], a[1], a[2], a[3]);
 
 	while (id != -1) {
 		p[(*returnSize)++] = nums[id];
@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
 	int *p;
 	int i;
 
-	printf("> %p\n", p=largestDivisibleSubset(a, 3, &siz));
+	printf("> %p\n", p=largestDivisibleSubset(a, 4, &siz));
 
 	for (i=0; i<siz; i++) {
 		printf("%d \n", p[i]);
