@@ -48,7 +48,6 @@ bool wordBreak(char* s, char** wordDict, int wordDictSize) {
     
     return isBreakable[sLength - 1];
 }
-#else
 bool wordBreak(char* s, char** wordDict, int wordDictSize) {
 	int len =  strlen(s);
 	bool *canSegment = malloc(sizeof(bool) * (len + 1));
@@ -79,6 +78,47 @@ bool wordBreak(char* s, char** wordDict, int wordDictSize) {
 	//}
 	
 	return canSegment[len];
+}
+#else
+bool indic(char *s, int i, int j, char** wordDict, int siz)
+{
+	char a[j-i+2];
+	int k;
+
+	memcpy(a, &s[i], j-i+1);
+	a[j-i+1] = '\0';
+
+	for (k=0; k<siz; k++) {
+		if (!strcmp(a, wordDict[k]))
+			return true;
+	}
+	return false;
+}
+
+bool wordBreak(char* s, char** wordDict, int wordDictSize) {
+	int i,j;
+	int len = strlen(s);
+	bool dp[len];
+
+
+	for (i=0; i<len; i++) {
+		dp[i] = indic(s, 0, i, wordDict, wordDictSize);
+		//printf(">> %d \n", dp[i]);
+		for (j=i-1; j>=0; j--) {
+			if (dp[i])
+				break;
+			if (dp[j] && indic(s, j+1, i, wordDict, wordDictSize)) {
+				dp[i] = true;
+			}
+		}
+	}
+    
+#if 0
+	for (i=0; i<len; i++)
+		printf("%d ", dp[i]);
+#endif
+
+	return dp[len-1];
 }
 #endif
 
