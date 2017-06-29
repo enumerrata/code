@@ -22,7 +22,7 @@ int isvalid(char *s, int start, int end)
 
 	return sum > 255 ? -1 : sum;
 }
-
+#if 0
 
 void ria(char *s, int slen, int start, int *stack, int top, char **p, int *retsiz)
 {
@@ -71,6 +71,52 @@ char** restoreIpAddresses(char* s, int* returnSize) {
     
 	return p;
 }
+#else
+
+void gen(char *s, int slen, int start, int siz, int *sp, int top, char **p, int *len)
+{
+	int i;
+	int num;
+
+	if (start >= slen) {
+		if (start == slen && top == 4) {
+			char *a;
+			a = malloc(64);
+			sprintf(a, "%d.%d.%d.%d", sp[0],sp[1],sp[2],sp[3]);
+			p[*len] = a;
+			(*len)++;
+			//printf("%d %d %d %d \n", sp[0],sp[1],sp[2],sp[3]);
+		}
+		return;	
+	}
+
+	if (siz <= 0)
+		return; 
+
+	for (i=start+1; i<=slen && i<start+4; i++) {
+		num = valid(s, start, i);
+		if (num >= 0) {
+			sp[top++] = num;
+			gen(s, slen, i, siz-1, sp, top, p, len);
+			top--;
+		}
+	}
+
+}
+
+char** restoreIpAddresses(char* s, int* returnSize) {
+	int len=strlen(s);
+	int sp[100];
+	char **p;
+
+	*returnSize = 0;
+
+	p = malloc(1000*sizeof(char *));
+	gen(s, len, 0, 4, sp, 0, p, returnSize);
+
+	return p;
+}
+#endif
 
 int main(int argc, char *argv[])
 {
