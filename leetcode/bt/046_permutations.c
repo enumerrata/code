@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <ctype.h>
 
+#if 0
 /**
  * Return an array of arrays of size *returnSize.
  * Note: The returned array must be malloced, assume caller calls free().
@@ -50,6 +51,47 @@ int** permute(int* nums, int numsSize, int* returnSize) {
 
    	return p; 
 }
+#else
+void swap(int *a, int *b)
+{
+	int t;
+
+	t = *a;
+	*a = *b;
+	*b = t;
+}
+
+void gen(int *nums, int nsiz, int cur, int **p, int *siz)
+{
+	int i;
+	int t;
+
+	if (cur == nsiz) {
+		p[*siz] = malloc(nsiz*sizeof(int));
+		memcpy(p[*siz], nums, nsiz*sizeof(int));
+		*siz += 1;
+		return;
+	}
+	
+	for (i=cur; i<nsiz; i++) {
+		swap(&nums[cur], &nums[i]);
+		gen(nums, nsiz, cur+1, p,  siz);
+		swap(&nums[cur], &nums[i]);
+	}
+
+}
+
+int** permute(int* nums, int numsSize, int* returnSize) {
+	int **p;
+
+	*returnSize = 0;
+	p = malloc(sizeof(int *)*10000);
+	*returnSize = 0;
+	gen(nums, numsSize, 0, p, returnSize);
+
+	return p;
+}
+#endif
 
 int main(int argc, char *argv[])
 {

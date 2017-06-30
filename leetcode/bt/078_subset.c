@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include <math.h>
 
+#if 0
 /**
  * Return an array of arrays of size *returnSize.
  * The sizes of the arrays are returned as *columnSizes array.
@@ -32,6 +33,52 @@ int** subsets(int* nums, int numsSize, int** columnSizes, int* returnSize) {
     
     return p;
 }
+#else
+
+void gen(int *nums, int nsiz, int *stack, int top, int **p, int *csiz, int *siz)
+{
+	int i,j;
+	int t;
+
+	if (top == nsiz) {
+		p[*siz] = malloc(nsiz*sizeof(int));
+		for (i=0,j=0; i<nsiz; i++) {
+			if (stack[i]) {
+				p[*siz][j++] = nums[i];
+			}
+			csiz[*siz] = j;
+			//printf("%d ", stack[i]);
+		}
+		*siz += 1;
+		//printf("\n");
+		return;
+	}
+
+	stack[top++] = 1;
+	gen(nums, nsiz, stack, top, p, csiz, siz);
+	top--;
+
+	stack[top++] = 0;
+	gen(nums, nsiz, stack, top, p, csiz, siz);
+	top--;
+}
+
+int** subsets(int* nums, int numsSize, int** columnSizes, int* returnSize) {
+	int len = pow(2, numsSize);
+	int **p;
+	int stack[numsSize];
+	int top=0;
+
+	*returnSize = 0;
+	(*columnSizes) = malloc(sizeof(int) * len);
+	p = malloc(sizeof(int *)*len);
+
+	gen(nums, numsSize, stack, top, p, *columnSizes, returnSize);
+
+	return p;
+}
+
+#endif
 
 int main(int argc, char *argv[])
 {
