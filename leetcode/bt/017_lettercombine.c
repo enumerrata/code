@@ -5,7 +5,7 @@
 #include <ctype.h>
 #include <math.h>
 
-
+#if 0
 /**
  * Return an array of size *returnSize.
  * Note: The returned array must be malloced, assume caller calls free().
@@ -48,6 +48,49 @@ char** letterCombinations(char* digits, int* returnSize) {
 	*returnSize = siz;
    	return p; 
 }
+#else
+
+void gen(char *digits, char **map, int *l, int len,  int cur, char *stack, int top, char **p, int *siz)
+{
+	int i,j,c;
+
+	if (len == top) {
+		//printf("-- %d  %s\n", len, stack);
+		p[(*siz)++] = strdup(stack);
+
+		return;
+	}
+
+	for (i=cur; i<len; i++) {
+		c = digits[i] - '0';
+		//printf(">> %d \n", c);
+		for (j=0; j<l[c]; j++) {
+			stack[top++] = map[c][j];
+			//printf("%c \n", stack[top-1] );
+			gen(digits, map, l, len, i+1, stack, top, p, siz);
+			top--;
+		}
+	}
+	
+}
+
+char** letterCombinations(char* digits, int* returnSize) {
+	char **p;
+	char *map[] = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv",  "wxyz" };
+	int l[]={0,0,3,3,3,3,3,4,3,4};
+	int len=strlen(digits);
+	char stack[len+1];
+
+	*returnSize = 0;
+    if (!len)
+        return NULL;
+	stack[len] = '\0';
+	p = malloc(sizeof(char *) * 1000);
+	gen(digits, map, l, len, 0, stack, 0, p, returnSize);
+
+	return p;
+}
+#endif
 
 int main(int argc, char *argv[])
 {
