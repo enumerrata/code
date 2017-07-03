@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <ctype.h>
 
+#if 0
 /**
  * Return an array of size *returnSize.
  * Note: The returned array must be malloced, assume caller calls free().
@@ -42,6 +43,45 @@ char** generateParenthesis(int n, int* returnSize) {
     
 	return pp;
 }
+#else
+/**
+ * Return an array of size *returnSize.
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+void gen(char *stack, int top, int open, int close, char **p, int *siz)
+{
+	if (!open && !close) {
+		//printf("%s\n", stack);
+		p[(*siz)++] = strdup(stack);
+		return ;
+	}
+
+	if (open) {
+		stack[top++] = '(';
+		gen(stack, top, open-1, close, p, siz);
+		top--;
+	}
+
+	if (close > open) {
+		stack[top++] = ')';
+		gen(stack, top, open, close-1, p, siz);
+		top--;
+	}
+}
+
+char** generateParenthesis(int n, int* returnSize) {
+	char **p;
+	char stack[n*2+1];
+
+	
+	stack[2*n] = '\0';
+	*returnSize = 0;
+	p = malloc(sizeof(char *) * 2000);
+	gen(stack, 0, n, n, p, returnSize);
+
+	return p;
+}
+#endif
 
 int main(int argc, char *argv[])
 {
