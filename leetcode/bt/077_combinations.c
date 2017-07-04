@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <ctype.h>
 
+#if 0
 /**
  * Return an array of arrays of size *returnSize.
  * The sizes of the arrays are returned as *columnSizes array.
@@ -57,6 +58,43 @@ int** combine(int n, int k, int** columnSizes, int* returnSize) {
 	
    	return out; 
 }
+#else
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *columnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+void gen(int start, int end, int len, int *stack, int top, int **p, int *csiz, int *siz)
+{
+	int i;
+	if (len==0) {
+		p[*siz] = malloc(sizeof(int) * top);
+		memcpy(p[*siz], stack, top*sizeof(int));
+		csiz[*siz] = top;
+		*siz += 1;
+		return;
+	}
+
+	for (i=start; i<=end; i++) {
+		stack[top++] = i;
+		gen(i+1, end, len-1, stack, top, p, csiz, siz);
+		top--;
+	}
+
+}
+
+int** combine(int n, int k, int** columnSizes, int* returnSize) {
+	int **p = malloc(sizeof(int*) * 10000);
+	int stack[k+1];
+
+
+	*returnSize = 0;
+	*columnSizes = malloc(sizeof(int) * 10000);
+	gen(1, n, k, stack, 0, p, *columnSizes, returnSize);
+    
+	return p;
+}
+#endif
 
 int main(int argc, char *argv[])
 {
