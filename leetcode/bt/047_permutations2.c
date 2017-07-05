@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <ctype.h>
 
+#if 0
 /**
  * Return an array of arrays of size *returnSize.
  * Note: The returned array must be malloced, assume caller calls free().
@@ -71,6 +72,51 @@ int** permuteUnique(int* nums, int numsSize, int* returnSize) {
 
    	return p; 
 }
+#else
+int cmp(const void *p1, const void *p2)
+{
+	return *(int *)p1 > *(int *)p2;
+}
+
+void swap(int *a, int *b)
+{
+	int t;
+	t = *a; *a = *b; *b = t;
+}
+
+void gen(int *nums, int len, int i, int j, int **p, int *siz)
+{
+	int k;
+	int *pp;
+	if (i==j-1) {
+		p[*siz] = malloc(sizeof(int) * len); 
+		memcpy(p[*siz], nums, len*sizeof(int));
+		*siz +=  1;
+		return;
+	}
+
+	for (k = i; k < j; k++) {
+		if (i != k && nums[i] == nums[k]) 
+			continue;
+		//printf("%d %d\n", i, k);
+		swap(&nums[i], &nums[k]);
+		pp = malloc(sizeof(int) * len);
+		memcpy(pp, nums, len*sizeof(int));
+		gen(pp, len, i+1, j, p, siz);
+	}
+}
+
+int** permuteUnique(int* nums, int numsSize, int* returnSize) {
+	int **p;
+    
+	p = malloc(sizeof(int *) * 10000);
+	*returnSize = 0;
+	qsort(nums, numsSize, sizeof(int), cmp);
+	gen(nums, numsSize, 0, numsSize, p, returnSize);
+
+	return p;
+}
+#endif
 
 int main(int argc, char *argv[])
 {

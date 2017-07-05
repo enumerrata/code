@@ -51,10 +51,62 @@ char* getPermutation(int n, int k) {
     
     return p;
 }
+#if 0
+int cmp(const void *p1, const void *p2)
+{
+	return *(char *)p1 > *(char *)p2;
+}
+void swap(char *a, char *b)
+{
+	int t;
+
+	t = *a;
+	*a = *b;
+	*b = t;
+}
+
+void gen(char *p, int nsiz, int cur, int k, int *cnt, char **q)
+{
+	int i=0;
+	char *t;
+
+	if (cur == nsiz) {
+		*cnt += 1;
+		//printf("%d %s \n", *cnt, p);
+		if (*cnt == k) {
+			*q = strdup(p);
+		}
+		return;
+	}
+
+	for (i=cur; i<nsiz; i++) {
+		swap(&p[cur], &p[i]);
+		t = strdup(p);
+		if (cur+1  < nsiz) {
+			qsort(t+i, nsiz-i, sizeof(char), cmp);
+		}
+		gen(t, nsiz, cur+1, k, cnt, q);
+	}
+}
+
+char* getPermutation(int n, int k) {
+	char *p,*q=NULL;
+	int i;
+	int cnt=0;
+
+	p = calloc(sizeof(char),n+1);
+	for (i=0; i<n; i++) {
+		p[i] = i + '1';
+	}
+	gen(p, n, 0, k, &cnt, &q);
+
+	return q;
+}
+#endif
 
 int main(int argc, char *argv[])
 {
-	printf("> %s\n", getPermutation(3, 2));
+	printf("> %s\n", getPermutation(3, 5));
 
 	return 0;
 }
