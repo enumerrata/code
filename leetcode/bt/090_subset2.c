@@ -5,7 +5,7 @@
 #include <ctype.h>
 #include <math.h>
 
-
+#if 0
 int cmp(const void *p1, const void *p2)
 {
 	return *(int *)p1 > *(int *)p2;
@@ -58,17 +58,60 @@ int** subsetsWithDup(int* nums, int numsSize, int** columnSizes, int* returnSize
     dfs(nums, numsSize, columnSizes, returnSize, stack, top, p);
 	return p;
 }
+#else
+int cmp(const void *p1, const void *p2)
+{
+	return *(int *)p1 > *(int *)p2;
+}
+
+void gen(int *nums, int nsiz, int start, int *stack, int top, int **p, int *csiz, int *siz)
+{
+	int i,j;
+	int t;
+
+	p[*siz] = malloc(nsiz*sizeof(int));
+	memcpy(p[*siz], stack, sizeof(int)*top);
+	csiz[*siz] = top;
+	*siz += 1;
+	
+	for (i=start; i<nsiz; i++) {
+		if (i == start || nums[i] != nums[i-1]) {
+			stack[top++] = nums[i];
+			gen(nums, nsiz, i+1, stack, top, p, csiz, siz);
+			top--;
+		}
+	}
+}
+
+int** subsetsWithDup(int* nums, int numsSize, int** columnSizes, int* returnSize) {
+	int len = pow(2, numsSize);
+	int **p;
+	int stack[numsSize];
+	int top=0;
+
+	*returnSize = 0;
+	(*columnSizes) = malloc(sizeof(int) * len);
+	p = malloc(sizeof(int *)*len);
+
+	qsort(nums, numsSize, sizeof(int), cmp);
+	gen(nums, numsSize, 0, stack, top, p, *columnSizes, returnSize);
+
+	return p;
+}
+
+#endif
 
 int main(int argc, char *argv[])
 {
-	int a[] = {1,2,2};
+	int a[] = {4,4,4,1,4};
 	int **p;
 	int *csiz;
 	int siz;
 	int i,j;
 
-	p = subsetsWithDup(a, 3, &csiz, &siz);
+	p = subsetsWithDup(a, 5, &csiz, &siz);
 
+	printf("> %d\n", siz);
 	for (i=0; i<siz; i++) {
 		for (j=0; j<csiz[i]; j++) {
 			printf("%d ", p[i][j]);
@@ -78,7 +121,6 @@ int main(int argc, char *argv[])
 
 	
 
-	printf("> \n");
 
 	return 0;
 }

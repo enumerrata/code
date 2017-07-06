@@ -35,32 +35,21 @@ int** subsets(int* nums, int numsSize, int** columnSizes, int* returnSize) {
 }
 #else
 
-void gen(int *nums, int nsiz, int *stack, int top, int **p, int *csiz, int *siz)
+void gen(int *nums, int nsiz, int start, int *stack, int top, int **p, int *csiz, int *siz)
 {
 	int i,j;
 	int t;
 
-	if (top == nsiz) {
-		p[*siz] = malloc(nsiz*sizeof(int));
-		for (i=0,j=0; i<nsiz; i++) {
-			if (stack[i]) {
-				p[*siz][j++] = nums[i];
-			}
-			csiz[*siz] = j;
-			//printf("%d ", stack[i]);
-		}
-		*siz += 1;
-		//printf("\n");
-		return;
+	p[*siz] = malloc(nsiz*sizeof(int));
+	memcpy(p[*siz], stack, sizeof(int)*top);
+	csiz[*siz] = top;
+	*siz += 1;
+	
+	for (i=start; i<nsiz; i++) {
+		stack[top++] = nums[i];
+		gen(nums, nsiz, i+1, stack, top, p, csiz, siz);
+		top--;
 	}
-
-	stack[top++] = 1;
-	gen(nums, nsiz, stack, top, p, csiz, siz);
-	top--;
-
-	stack[top++] = 0;
-	gen(nums, nsiz, stack, top, p, csiz, siz);
-	top--;
 }
 
 int** subsets(int* nums, int numsSize, int** columnSizes, int* returnSize) {
@@ -73,7 +62,7 @@ int** subsets(int* nums, int numsSize, int** columnSizes, int* returnSize) {
 	(*columnSizes) = malloc(sizeof(int) * len);
 	p = malloc(sizeof(int *)*len);
 
-	gen(nums, numsSize, stack, top, p, *columnSizes, returnSize);
+	gen(nums, numsSize, 0, stack, top, p, *columnSizes, returnSize);
 
 	return p;
 }
@@ -82,7 +71,22 @@ int** subsets(int* nums, int numsSize, int** columnSizes, int* returnSize) {
 
 int main(int argc, char *argv[])
 {
-	printf("> \n");
+
+	int a[] = {1,2,2};
+	int **p;
+	int *csiz;
+	int siz;
+	int i,j;
+
+	p = subsets(a, 3, &csiz, &siz);
+
+	printf("> %d\n", siz);
+	for (i=0; i<siz; i++) {
+		for (j=0; j<csiz[i]; j++) {
+			printf("%d ", p[i][j]);
+		}
+		printf("\n");
+	}
 
 	return 0;
 }
