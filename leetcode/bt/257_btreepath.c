@@ -32,7 +32,7 @@ char *str(int *path, int len)
 	return q;
 }
 
-void printpath(struct TreeNode *r, int *path, int len, char **p, int *retsize)
+void printpath(struct TreeNode *r, int *path, int len, char **p, int *siz)
 {
     if (!r)
         return;
@@ -40,17 +40,16 @@ void printpath(struct TreeNode *r, int *path, int len, char **p, int *retsize)
 	path[len++] = r->val;
 
     if (!r->left && !r->right) {
-		//printf(">> len %d %d\n", len, r->val);
-		p[*retsize] = str(path, len);
-		*retsize += 1;
+		p[*siz] = str(path, len);
+		*siz += 1;
 		return;
 	}
 
 	if (r->left)
-		printpath(r->left, path, len, p, retsize);
+		printpath(r->left, path, len, p, siz);
     
 	if (r->right)
-		printpath(r->right, path, len, p, retsize);
+		printpath(r->right, path, len, p, siz);
 }
 
 char** binaryTreePaths(struct TreeNode* root, int* returnSize) {

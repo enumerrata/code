@@ -11,38 +11,38 @@ struct TreeNode
     struct TreeNode* right;
 };
 
-void add(int v, struct TreeNode *r, int *num, int *sum)
-{
-    r->val += v;
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+bool sum1(struct TreeNode *r, int s) {
+   
+  
+    if (!r->left && !r->right && r->val == s)
+        return true;
     
-    if (!r->left && !r->right) {
-        sum[*num] = r->val;
-        *num += 1;
+    if (r->left) {
+        if (sum1(r->left, s - r->val))
+            return true;
     }
     
-    if (r->left)
-        add(r->val, r->left, num, sum);
-    
-    if (r->right)
-        add(r->val, r->right, num, sum);
+    if (r->right) {        
+        if (sum1(r->right, s - r->val))
+            return true;
+    }
+        
+    return false;
 }
 
 bool hasPathSum(struct TreeNode* root, int sum) {
-    int *suml = malloc(10000 * sizeof(int));
-    int num=0;
-    int i;
-    
     if (!root)
         return false;
     
-    add(0, root, &num, suml);
-
-    for (i=0; i<num; i++) {
-		//printf("%d \n", suml[i]);
-        if (suml[i] == sum)
-            return true;
-    }
-    return false;
+    return sum1(root, sum); 
 }
 
 struct TreeNode* newNode(int data)
@@ -66,9 +66,7 @@ int main(int argc, char *argv[])
     root->right       = newNode(20);
     root->right->left  = newNode(15);
     root->right->right = newNode(7);
-	printf("> \n");
-
-	hasPathSum(root, 100);
+	printf("> %d\n", hasPathSum(root, 30));
 
 	return 0;
 }
