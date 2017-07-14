@@ -23,25 +23,15 @@ bool isSym(struct TreeNode* p, struct TreeNode* q) {
     else
         return isSym(p->left, q->right) && isSym(p->right, q->left);
 }
+
 bool isSymmetric(struct TreeNode* root) {
     if (!root)
         return true;
-    if (!root->left && !root->right)
-        return true;
-    if (root->left && !root->right) {
-        return false;
-    }
+
     
-    if (!root->left && root->right) {
-        return false;
-    }
-    
-    if (root->left->val != root->right->val) {
-        return false;
-    }
-    
-    return isSym(root->left->left, root->right->right) && isSym(root->right->left, root->left->right);
+    return isSym(root->left, root->right);
 }
+
 int main(int argc, char *argv[])
 {
 	printf("> \n");
