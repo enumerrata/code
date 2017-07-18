@@ -13,24 +13,14 @@ struct TreeNode {
     struct TreeNode *right;
 };
 
-int sum1(int *stack, int top)
-{
-	int sum = 0;
-
-	while (--top >= 0) {
-		sum += stack[top];
-	}
-	return sum;
-}
-
-
 void pathsum(struct TreeNode* root, int sum, int *stack, int top, int** col, int* siz, int **p)
 {
 	int i;
 	
 	stack[top++] = root->val;
+	sum -= root->val;
 		
-	if (sum1(stack, top) == sum && !root->left && !root->right) {
+	if (!sum && !root->left && !root->right) {
 		(*col)[*siz] = top;
 		p[*siz] = malloc(sizeof(int) * top);
 		memcpy(p[*siz], stack, sizeof(int) * top);
@@ -91,7 +81,7 @@ int main(int argc, char *argv[])
     root->right->left  = newNode(15);
     root->right->right = newNode(7);
 
-	p = pathSum(root, 23, &columnSizes, &siz);
+	p = pathSum(root, 12, &columnSizes, &siz);
 
 	for (i=0; i<siz; i++) {
 		for (j=0; j<columnSizes[i]; j++)

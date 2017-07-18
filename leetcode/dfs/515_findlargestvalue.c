@@ -7,6 +7,7 @@
 
 #include "../tree.h"
 
+#if 0
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -64,7 +65,38 @@ int* largestValues(struct TreeNode* root, int* returnSize) {
 	}
    	return p; 
 }
+#else
 
+void gen(struct TreeNode *root, int d, int *p, int *siz)
+{
+	if (!root)
+		return;
+	
+    if (*siz < d+1) {
+        p[d] = root->val;
+        *siz += 1;
+    } else {
+        if (root->val > p[d])
+		    p[d] = root->val;
+    }
+    
+	gen(root->left, d+1, p, siz);
+	gen(root->right, d+1, p, siz);
+}
+
+int* largestValues(struct TreeNode* root, int* returnSize) {
+	int *p;
+
+	p = calloc(1000, sizeof(int));
+	*returnSize = 0;
+    memset(p, INT_MIN, sizeof(int) * 1000);
+
+	gen(root, 0, p, returnSize);
+	return p;
+    
+}
+
+#endif
 int main(int argc, char *argv[])
 {
 	int *p;
