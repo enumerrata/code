@@ -5,13 +5,13 @@
 #include <ctype.h>
 
 /**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     struct TreeNode *left;
- *     struct TreeNode *right;
- * };
  */
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+};
+#if 0
 void flatten(struct TreeNode* root) {
     struct TreeNode *t;
     
@@ -34,6 +34,35 @@ void flatten(struct TreeNode* root) {
     root->left = NULL;
     
 }
+#else
+void flatten(struct TreeNode* root) 
+{
+	struct TreeNode *cur;
+
+	if (!root)
+		return;
+	
+	while (root) {
+
+		if (root->left ) {
+            if (root->right) {
+			    cur = root->left;
+
+			    while (cur->right)
+				    cur = cur->right;
+
+			    cur->right = root->right;
+            }
+            root->right = root->left;
+            root->left = NULL;
+		} 
+		      
+
+		root = root->right;
+	}
+
+}
+#endif
 
 int main(int argc, char *argv[])
 {
