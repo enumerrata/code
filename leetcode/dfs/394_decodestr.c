@@ -7,31 +7,7 @@
 
 #include "../tree.h"
 
-/*
-    string decodeString(const string& s, int& i) {
-        string res;
-        
-        while (i < s.length() && s[i] != ']') {
-            if (!isdigit(s[i]))
-                res += s[i++];
-            else {
-                int n = 0;
-                while (i < s.length() && isdigit(s[i]))
-                    n = n * 10 + s[i++] - '0';
-                    
-                i++; // '['
-                string t = decodeString(s, i);
-                i++; // ']'
-                
-                while (n-- > 0)
-                    res += t;
-            }
-        }
-        
-        return res;
-    }
-*/
-
+#if 0
 char* decodeStr(char* s, int *cur) {
 	char *p = calloc(10000, 1);
 	char *t;
@@ -64,14 +40,70 @@ char* decodeString(char* s) {
 	int cur = 0;
 	return decodeStr(s, &cur);
 }
+#else
+
+int repeatn(char *p, int n)
+{
+	int l = strlen(p);	
+	int i;
+
+	for (i=1; i<n; i++) {
+		memcpy(p+i*l, p, l);
+	}
+
+	return l*n;
+}
+
+char* decodeString(char* s) {
+	int i=0;
+	int nstack[1000];
+	int cstack[1000];
+	int ntop = 1;
+	char *sstack[1000];
+
+	sstack[0] = calloc(10000, 1);
+    cstack[0] = 0;
+
+	while (s[i]) {
+		if (isdigit(s[i])) {
+			int n = 0;
+			while (s[i] && isdigit(s[i]))
+				n = n * 10 + s[i++] - '0';
+			cstack[ntop] = 0;
+			nstack[ntop] = n;
+			sstack[ntop] = malloc(10000);
+			ntop++;
+			i++; //skip [
+		} else {
+			if (s[i] == ']') {
+				int l;
+				sstack[ntop-1][cstack[ntop-1]] = '\0';
+				l = repeatn(sstack[ntop-1], nstack[ntop-1]);
+				//printf("%s %d\n", sstack[ntop-1], nstack[ntop-1]);
+				memcpy(&sstack[ntop-2][cstack[ntop-2]], sstack[ntop-1], l);
+				cstack[ntop-2] += l;
+				//printf("%s %d\n", sstack[ntop-2], cstack[ntop-2]);
+				ntop--;
+
+			} else {
+				sstack[ntop-1][cstack[ntop-1]] = s[i];
+				cstack[ntop-1] += 1;
+			}
+			i++;
+		}
+
+	}
+	return sstack[0];
+}
+
+#endif
 
 int main(int argc, char *argv[])
 {
-	char a[] = "23[abc34[cd]]56[xy]";
+	char a[] = "slkjdf34[b]";
 	int cur=0;
 
-	//char a[] = "a2[c]";
-	printf("%s", decodeString(a));
+	printf("%s\n", decodeString(a));
 
 	return 0;
 }
