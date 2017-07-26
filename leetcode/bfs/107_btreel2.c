@@ -19,6 +19,7 @@ struct TreeNode {
  */
 // [[3], [9,20], [15,7]]
 // [ 1,   2,      2]
+#if 0
 int** levelOrderBottom(struct TreeNode* root, int** columnSizes, int* returnSize) {
     if (!root) {
 		*returnSize = 0;
@@ -79,6 +80,55 @@ int** levelOrderBottom(struct TreeNode* root, int** columnSizes, int* returnSize
 
 	return list;
 }
+#else
+
+void add(struct TreeNode* root, int **p, int *csiz, int *siz, int lvl) 
+{
+	if (!root)
+		return;
+
+	*siz = *siz > lvl+1 ? *siz : lvl+1;
+
+	add(root->left, p, csiz, siz, lvl+1);
+	add(root->right, p, csiz, siz, lvl+1);
+
+	if (!p[lvl] ) {
+		p[lvl] = malloc(sizeof(int) * 1000);
+	} 
+	
+	p[lvl][csiz[lvl]] = root->val;
+	csiz[lvl] += 1;
+}
+
+int** levelOrderBottom(struct TreeNode* root, int** columnSizes, int* returnSize) 
+{
+    if (!root) {
+		*returnSize = 0;
+        return NULL;
+	}
+	int **list = calloc(1000, sizeof(int *));
+	*columnSizes = calloc(1000, sizeof(int));
+	*returnSize = 0;
+	int i;
+	int *t,tt;
+	
+	add(root, list, *columnSizes, returnSize, 0);
+#if 1
+	for (i=0; i<(*returnSize)/2; i++) {
+		t = list[i];
+		list[i] = list[*returnSize-i-1];
+		list[*returnSize-i-1] = t;
+
+		tt = (*columnSizes)[i];
+		(*columnSizes)[i] = (*columnSizes)[*returnSize -i -1];
+		(*columnSizes)[*returnSize-i-1] =  tt;
+	}
+#endif
+	
+	return list;
+
+}
+#endif
 
 struct TreeNode *new(int val)
 {
@@ -105,7 +155,7 @@ int main(int argc, char *argv[])
 	r->right->left = new(15);
 	r->right->right = new(7);
 
-	l = levelOrder(r, &columnSizes, &returnSize);
+	l = levelOrderBottom(r, &columnSizes, &returnSize);
 
 	printf("%d %d %d\n", returnSize, columnSizes[0], columnSizes[1]);
 
