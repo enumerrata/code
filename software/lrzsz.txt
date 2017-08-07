@@ -1,0 +1,14 @@
+
+https://ohse.de/uwe/software/lrzsz.html
+
+1. lrz and lsz zmodem
+
+ar cru libzmodem.a long-options.o xstrtol.o xstrtoul.o error.o 
+ar cru libintl.a intl-compat.o bindtextdom.o dcgettext.o dgettext.o gettext.o finddomain.o loadmsgcat.o localealias.o textdomain.o l10nflist.o explodename.o
+
+
+gcc -g -O2  -o lrz  lrz.o timing.o zperr.o zreadline.o crctab.o rbsb.o zm.o protname.o tcp.o lsyslog.o canit.o ../lib/libzmodem.a ../intl/libintl.a -lnsl
+
+gcc -g -O2  -o lsz  lsz.o timing.o zperr.o zreadline.o crctab.o rbsb.o zm.o protname.o tcp.o lsyslog.o canit.o ../lib/libzmodem.a ../intl/libintl.a -lnsl
+
+
